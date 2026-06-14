@@ -5,5 +5,4 @@ public class Venue {
     private String nama;
     private String lokasi;
     private int kapasitas;
-
 }

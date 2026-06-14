@@ -9,5 +9,6 @@ public class User {
         this.nama = nama;
         this.id = id;
         this.email = email;
+
     }
 }
