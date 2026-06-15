@@ -63,11 +63,59 @@ public class DatabaseManager {
 
             // Contoh (hapus dan ganti dengan tabel kalian):
             stmt.execute(
-                    "CREATE TABLE IF NOT EXISTS contoh ("
-                            + "  id TEXT PRIMARY KEY,"
-                            + "  nama TEXT NOT NULL,"
-                            + "  created_at TEXT DEFAULT (datetime('now'))"
-                            + ")"
+                    "CREATE TABLE IF NOT EXISTS users (\n" +
+                            "    id          TEXT PRIMARY KEY,\n" +
+                            "    name        TEXT NOT NULL,\n" +
+                            "    email       TEXT NOT NULL UNIQUE,\n" +
+                            "    phone       TEXT,\n" +
+                            "    role        TEXT DEFAULT 'buyer',       -- 'buyer' atau 'organizer'\n" +
+                            "    created_at  TEXT DEFAULT (datetime('now'))\n" +
+                            ");\n" +
+                            "\n" +
+                            "CREATE TABLE IF NOT EXISTS venues (\n" +
+                            "    id              TEXT PRIMARY KEY,\n" +
+                            "    name            TEXT NOT NULL,\n" +
+                            "    address         TEXT NOT NULL,\n" +
+                            "    max_capacity    INTEGER NOT NULL,\n" +
+                            "    created_at      TEXT DEFAULT (datetime('now'))\n" +
+                            ");\n" +
+                            "\n" +
+                            "CREATE TABLE IF NOT EXISTS events (\n" +
+                            "    id              TEXT PRIMARY KEY,\n" +
+                            "    type            TEXT NOT NULL,           -- 'concert', 'seminar', 'sport_match'\n" +
+                            "    name            TEXT NOT NULL,\n" +
+                            "    venue_id        TEXT NOT NULL,\n" +
+                            "    organizer_id    TEXT NOT NULL,           -- FK ke users (role = 'organizer')\n" +
+                            "    date            TEXT NOT NULL,           -- format: YYYY-MM-DD\n" +
+                            "    base_price      REAL NOT NULL,\n" +
+                            "    created_at      TEXT DEFAULT (datetime('now')),\n" +
+                            "    FOREIGN KEY (venue_id) REFERENCES venues(id),\n" +
+                            "    FOREIGN KEY (organizer_id) REFERENCES users(id)\n" +
+                            ");\n" +
+                            "\n" +
+                            "CREATE TABLE IF NOT EXISTS capacities (\n" +
+                            "    id          INTEGER PRIMARY KEY AUTOINCREMENT,\n" +
+                            "    event_id    TEXT NOT NULL,\n" +
+                            "    category    TEXT NOT NULL,           -- 'vip', 'regular', 'festival', 'tribune', 'vvip'\n" +
+                            "    total       INTEGER NOT NULL,\n" +
+                            "    filled      INTEGER DEFAULT 0,\n" +
+                            "    FOREIGN KEY (event_id) REFERENCES events(id)\n" +
+                            ");\n" +
+                            "\n" +
+                            "CREATE TABLE IF NOT EXISTS tickets (\n" +
+                            "    id              TEXT PRIMARY KEY,\n" +
+                            "    event_id        TEXT NOT NULL,\n" +
+                            "    user_id         TEXT NOT NULL,           -- FK ke users\n" +
+                            "    category        TEXT NOT NULL,\n" +
+                            "    quantity        INTEGER NOT NULL,\n" +
+                            "    unit_price      REAL NOT NULL,\n" +
+                            "    total_price     REAL NOT NULL,\n" +
+                            "    purchase_date   TEXT DEFAULT (date('now')),\n" +
+                            "    status          TEXT DEFAULT 'active',   -- 'active', 'refunded'\n" +
+                            "    refund_amount   REAL DEFAULT 0,\n" +
+                            "    FOREIGN KEY (event_id) REFERENCES events(id),\n" +
+                            "    FOREIGN KEY (user_id) REFERENCES users(id)\n" +
+                            ");"
             );
 
             System.out.println("Database berhasil diinisialisasi.");
