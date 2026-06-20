@@ -1,8 +1,8 @@
 package model;
 
 public class Venue {
-    private int id;
-    private String nama;
-    private String lokasi;
-    private int kapasitas;
+    private String id;
+    private String name;
+    private String address;
+    private int maxCapacity;
 }

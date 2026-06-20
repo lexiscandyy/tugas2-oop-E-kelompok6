@@ -1,4 +1,9 @@
 package model;
 
-public class SportMatch {
+public class SportMatch extends Event{
+
+    @Override
+    public double calculateTicketPrice(String category) {
+        return 0;
+    }
 }
