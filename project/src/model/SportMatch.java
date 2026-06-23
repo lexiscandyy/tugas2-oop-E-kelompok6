@@ -18,5 +18,4 @@ public class SportMatch extends Event {
             default:     return getBasePrice() * 1.0;
         }
     }
-
 }
