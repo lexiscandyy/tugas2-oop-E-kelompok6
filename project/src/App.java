@@ -1,3 +1,7 @@
+import handler.EventHandler;
+import handler.TicketHandler;
+import handler.UserHandler;
+import handler.VenueHandler;
 import server.Server;
 
 import database.DatabaseManager;
@@ -20,6 +24,12 @@ public class App {
         }
 
         Server server = new Server(port);
+
+        // HANDLER
+        EventHandler eventHandler = new EventHandler();
+        TicketHandler ticketHandler = new TicketHandler();
+        UserHandler userHandler = new UserHandler();
+        VenueHandler venueHandler = new VenueHandler();
 
         // =============================================
         // CONTOH ROUTE — Hapus semua contoh di bawah ini
@@ -125,7 +135,19 @@ public class App {
         //   server.get("/api/events/ringkasan-harga", ...);
         // =============================================
 
+        // USER
+        server.get("/api/users", (req, res) -> {
+            userHandler.getAllUsers(req, res);
+        });
 
+        server.get("/api/users/{id}", (req, res) -> {
+            String id = req.getPathParam("id");
+
+            Map<String, Object> data = new HashMap<>();
+            data.put("id", id);
+            data.put("nama", "Item dengan ID " + id);
+            res.sendSuccess(data);
+        });
 
         // Jalankan server
         System.out.printf("Server berjalan di http://localhost:%d%n", port);

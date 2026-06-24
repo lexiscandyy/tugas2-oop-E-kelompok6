@@ -3,12 +3,13 @@ package service;
 import model.User;
 import repository.UserRepository;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class UserService {
-    private UserRepository userRepository;
+    private static UserRepository userRepository;
 
-    public userService(){
+    public void userService(){
         userRepository = new UserRepository();
     }
 
@@ -20,8 +21,8 @@ public class UserService {
         return userRepository.getUserId(id);
     }
 
-    public List<User> getAllUsers(){
-        return userRepository.getAllUsers();
+    public static List<User> getAllUsers(String role) throws SQLException {
+        return userRepository.getAllUsers(role);
     }
 
     public void updateUser (User user){
