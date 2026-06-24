@@ -30,4 +30,14 @@ public class Venue {
     public void setAddress(String address) { this.address = address; }
     public void setMaxCapacity(int maxCapacity) { this.maxCapacity = maxCapacity; }
     public void setCreatedAt(String createdAt) { this.createdAt = createdAt; }
+
+    @Override
+    public String toString(){
+        return "Venue{" +
+                "id ='" + id + '\'' +
+                ", name ='" + name + '\'' +
+                ", address ='" + address + '\'' +
+                ", maxCapacity ='" + maxCapacity + '\'' +
+                '}';
+    }
 }
