@@ -73,7 +73,7 @@ public class VenueHandler {
             return;
         }
 
-        Venue result = VenueService.updateVenue(data);
+        Map<String, Object> result = VenueService.updateVenue(data);
         if(result == null){
             res.sendError(404, "id tidak ditemukan");
             return;

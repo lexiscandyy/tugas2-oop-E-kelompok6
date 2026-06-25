@@ -1,10 +1,12 @@
 package service;
 
+import model.Event;
 import repository.EventRepository;
 import repository.UserRepository;
 import repository.VenueRepository;
 
 import java.sql.SQLException;
+import java.util.List;
 import java.util.Map;
 
 public class EventService {
@@ -56,5 +58,9 @@ public class EventService {
         }
 
         return eventRepository.addEvent(data);
+    }
+
+    public static List<Map<String, Object>> getAllEvents(String type, String dateFrom)throws SQLException {
+        return eventRepository.getAllEvents(type, dateFrom);
     }
 }

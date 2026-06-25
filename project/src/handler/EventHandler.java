@@ -1,20 +1,31 @@
 package handler;
 
+import model.Event;
 import server.Request;
 import server.Response;
 import service.EventService;
 
+import java.sql.SQLException;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
+import java.time.format.DateTimeParseException;
+import java.time.format.ResolverStyle;
+import java.util.List;
 import java.util.Map;
 
 public class EventHandler {
-    public void getAllEvents(Request req, Response res){
-
+    public void getAllEvents(Request req, Response res) throws Exception {
+        String type = req.getQueryParam("type");
+        String dateFrom = req.getQueryParam("dateFrom");
+        List<Map<String, Object>> result = EventService.getAllEvents(type, dateFrom);
+        res.sendSuccess(result);
     }
 
     public void getPriceSummary(Request req, Response res) {
     }
 
     public void getEventById(Request req, Response res) {
+
     }
 
     public void addEvent(Request req, Response res) throws Exception {
@@ -54,6 +65,11 @@ public class EventHandler {
             return;
         }
 
+        if(isValidDate(date) == false){
+            res.sendError(400, "format date harus 'YYYY-MM-DD'");
+            return;
+        }
+
         Map<String, Object> result = EventService.addEvent(data);
         if(result == null){
             res.sendError(404, "gagal membuat event: venueId salah/organizerId salah");
@@ -63,5 +79,15 @@ public class EventHandler {
     }
 
     public void updateEvent(Request req, Response res) {
+    }
+
+    public static boolean isValidDate(String date) {
+        try {
+            DateTimeFormatter formatter = DateTimeFormatter.ofPattern("uuuu-MM-dd").withResolverStyle(ResolverStyle.STRICT);
+            LocalDate.parse(date, formatter);
+            return true;
+        } catch (DateTimeParseException e) {
+            return false;
+        }
     }
 }

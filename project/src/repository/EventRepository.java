@@ -12,10 +12,45 @@ import java.util.*;
 
 public class EventRepository {
 
+    public List<Map<String, Object>> getAllEvents(String type, String dateFrom) throws SQLException{
+        String query = "select * from events";
+        if(type != null && dateFrom != null) {
+            query += " where type = ? and date >= ?";
+        }else if(type != null){
+            query += " where type = ?";
+        }else if(dateFrom != null){
+            query += " where date >= ?";
+        }
+
+        List<Map<String, Object>> result = new ArrayList<>();
+
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)){
+            int idx = 1;
+            if(type != null) ps.setString(idx++, type);
+            if(dateFrom != null) ps.setString(idx++, dateFrom);
+
+            ResultSet rs = ps.executeQuery();
+            while(rs.next()){
+                Map<String, Object> tmp = new LinkedHashMap<>();
+                tmp.put("id", rs.getString("id"));
+                tmp.put("type", rs.getString("type"));
+                tmp.put("name", rs.getString("name"));
+                tmp.put("venueId", rs.getString("venue_id"));
+                tmp.put("organizerId", rs.getString("organizer_id"));
+                tmp.put("date", rs.getString("date"));
+                tmp.put("basePrice", rs.getString("base_price"));
+                tmp.put("createdAt", rs.getString("created_at"));
+                tmp.put("capacity", getEventCapacity(rs.getString("id")));
+                result.add(tmp);
+            }
+            return result;
+        }
+    }
+
     public Map<String, Object> addEvent(Map<String, Object> data) throws SQLException{
         String query = "insert into events (id, type, name, venue_id, organizer_id, date, base_price) " +
                 "values(?,?,?,?,?,?,?)";
-
 
 //        Map<String, Object> result;
 
@@ -71,6 +106,22 @@ public class EventRepository {
         }
     }
 
+    public Map<String, Object> getEventCapacity(String eventId) throws SQLException{
+        String query = "select * from capacities where event_id = ?";
+
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, eventId);
+            ResultSet rs = ps.executeQuery();
+
+            Map<String, Object> result = new LinkedHashMap<>();
+            while(rs.next()){
+                result.put(rs.getString("type"), rs.getInt("total"));
+            }
+            return result;
+        }
+    }
+
     public int countEvents()throws  SQLException {
         String query = "select count(*) as total from events";
         try(Connection conn = DatabaseManager.getConnection();
@@ -85,6 +136,7 @@ public class EventRepository {
 
         try(Connection conn = DatabaseManager.getConnection();
             PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, date);
             ResultSet rs = ps.executeQuery();
             return rs.next();
         }
