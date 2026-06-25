@@ -9,10 +9,36 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class VenueRepository {
-    public void addVenue(Venue venue){}
-    public User getVenueId(String id){}
+
+    public Venue addVenue(Map<String, Object> newVenue) throws SQLException{
+        String query = "insert into venues (id, name, address, max_capacity) " +
+                "values (?, ?, ?, ?)";
+
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, (String) newVenue.get("id"));
+            ps.setString(2, (String) newVenue.get("name"));
+            ps.setString(3, (String) newVenue.get("address"));
+            ps.setInt(4, (int) newVenue.get("maxCapacity"));
+
+            int affectedRows = ps.executeUpdate();
+            if(affectedRows == 0){
+                throw new SQLException("gagal membuat data");
+            }else{
+                Venue result = new Venue(
+                        (String) newVenue.get("id"),
+                        (String) newVenue.get("name"),
+                        (String) newVenue.get("address"),
+                        (int) newVenue.get("maxCapacity"),
+                        "Now"
+                );
+                return result;
+            }
+        }
+    }
 
     public List<Venue> getAllVenues() throws SQLException {
         String query = "select * from venues";
@@ -55,6 +81,14 @@ public class VenueRepository {
 
     public void updateVenue(Venue venue){}
     public void deleteVenue(Venue venue){}
+
+    public int countVenues() throws SQLException{
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement("select count(*) as totalData from venues")){
+            ResultSet rs = ps.executeQuery();
+            return rs.getInt("totalData");
+        }
+    }
 }
 //"CREATE TABLE IF NOT EXISTS venues (\n" +
 //                            "    id              TEXT PRIMARY KEY,\n" +

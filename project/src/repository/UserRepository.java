@@ -13,6 +13,7 @@ import java.util.List;
 import java.util.Map;
 
 public class UserRepository {
+
     public void addUser(Map<String, Object> newData) throws SQLException{
         String query = "insert into users (id, name, email, phone, role) " +
                 "values(?,?,?,?,?)";
@@ -116,7 +117,7 @@ public class UserRepository {
         }
     }
 
-    public void updateUser(Map<String, Object> user) throws SQLException{
+    public User updateUser(Map<String, Object> user) throws SQLException{
         String query = "update users set";
         if((String) user.get("name") != null) query += " name = ?, ";
         if((String) user.get("email") != null) query += " email = ?, ";
@@ -141,9 +142,28 @@ public class UserRepository {
             int affectedRows = ps.executeUpdate();
             if(affectedRows == 0){
                 throw new SQLException("Gagal update data user");
+            }else{
+                User result = new User(
+                        (String) user.get("id"),
+                        (String) user.get("name"),
+                        (String) user.get("email"),
+                        (String) user.get("phone"),
+                        (String) user.get("role")
+                );
+                return result;
             }
         }
     }
+
+    public int countUser() throws  SQLException{
+        String query = "select count(*) as totalUser from users";
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)){
+            ResultSet rs= ps.executeQuery();
+            return rs.getInt("totalUser");
+        }
+    }
+
     public void deleteUser(User user){}
 }
 

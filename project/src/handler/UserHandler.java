@@ -39,10 +39,6 @@ public class UserHandler {
             return;
         }
 
-        if((String)body.get("id") == null || ((String)body.get("id")).isEmpty()){
-            res.sendError(400, "id tidak boleh kosong");
-            return;
-        }
         if((String)body.get("name") == null || ((String)body.get("name")).isEmpty()){
             res.sendError(400, "name tidak boleh kosong");
             return;

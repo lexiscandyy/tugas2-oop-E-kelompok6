@@ -5,9 +5,16 @@ import repository.VenueRepository;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.Map;
 
 public class VenueService {
     private static VenueRepository venueRepository;
+
+    public static String generateId() throws SQLException {
+        String result = "VNU-";
+        result += String.valueOf(venueRepository.countVenues() + 1);
+        return result;
+    }
 
     public static List<Venue> getAllVenues() throws SQLException {
         return venueRepository.getAllVenues();
@@ -17,8 +24,10 @@ public class VenueService {
         return venueRepository.getVenueById(id);
     }
 
-    public void addVenue(Venue venue){
-        venueRepository.addVenue(venue);
+    public static Venue addVenue(Map<String, Object> newVenue) throws SQLException {
+        String newId = generateId();
+        newVenue.put("id", newId);
+        return venueRepository.addVenue(newVenue);
     }
 
     public Venue getVenueId(String id){

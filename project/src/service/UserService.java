@@ -14,12 +14,14 @@ public class UserService {
         userRepository = new UserRepository();
     }
 
-    public static void addUser(Map<String, Object> newUser) throws SQLException {
+    public static String generateId() throws SQLException{
+        String result = "USR-";
+        result += String.valueOf(userRepository.countUser() + 1);
+        return result;
+    }
 
-        if(userRepository.findId((String) newUser.get("id")) == true){
-            throw new IllegalArgumentException(String.format("User dengan id: %s sudah ada !!", (String) newUser.get("id")));
-//            return;
-        }
+    public static void addUser(Map<String, Object> newUser) throws SQLException {
+        newUser.put("id", generateId());
 
         if(userRepository.findEmail((String) newUser.get("email")) == true){
             throw new IllegalArgumentException("email sudah ada !!");
@@ -42,7 +44,7 @@ public class UserService {
         return userRepository.getAllUsers(role);
     }
 
-    public static void updateUser (Map<String, Object> user) throws SQLException {
+    public static User updateUser (Map<String, Object> user) throws SQLException {
         if(userRepository.findId((String) user.get("id")) == false){
             throw new SQLException("ID tidak ditemukan");
         }
@@ -54,10 +56,10 @@ public class UserService {
         if((String)user.get("phone") != null && userRepository.findPhone((String)user.get("phone")) == true){
             throw new IllegalArgumentException(String.format("nomor %s sudah terdaftar pada user lain", (String) user.get("phone")));
         }
-        userRepository.updateUser(user);
+        return userRepository.updateUser(user);
     }
-
-    public void deleteUser(String id){
-        userRepository.deleteUser(id);
-    }
+//
+//    public void deleteUser(String id){
+//        userRepository.deleteUser(id);
+//    }
 }

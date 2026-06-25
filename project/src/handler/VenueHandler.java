@@ -24,6 +24,31 @@ public class VenueHandler {
     public void addVenue(Request req, Response res) throws Exception{
         Map<String, Object> data = req.getJSON();
 
+        if (data == null) {
+            res.sendError(400, "Request body harus berformat JSON (Content-Type: application/json)");
+            return;
+        }
+
+        String newName = (String) data.get("name");
+        String newAddress = (String) data.get("address");
+        Integer newMaxCapacity = (Integer) data.get("maxCapacity");
+
+        if(
+            newName == null
+            || newAddress == null
+            || newMaxCapacity == null
+        ){
+            res.sendError(400, "Wajib isi semua data");
+            return;
+        }
+
+        if(newName.isEmpty() || newAddress.isEmpty()){
+            res.sendError(400, "nama atau address tidak boleh kosong");
+            return;
+        }
+
+        Venue result = VenueService.addVenue(data);
+        res.sendSuccess(result);
     }
 
     public void updateVenue(Request req, Response res) throws Exception{
