@@ -17,4 +17,10 @@ public class UserHandler {
         res.sendSuccess(data);
     }
 
+    public void getUserById(Request req, Response res) throws Exception{
+        String id =req.getPathParam("id");
+        User data = UserService.getUserById(id);
+        res.sendSuccess(data);
+    }
+
 }
