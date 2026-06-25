@@ -24,7 +24,7 @@ public class VenueService {
         return venueRepository.getAllVenues();
     }
 
-    public static Venue getVenueById(String id) throws SQLException {
+    public static Map<String, Object> getVenueById(String id) throws SQLException {
         return venueRepository.getVenueById(id);
     }
 
@@ -35,7 +35,7 @@ public class VenueService {
     }
 
 
-    public static Venue updateVenue (Map<String, Object> newData) throws SQLException{
+    public static Map<String, Object> updateVenue (Map<String, Object> newData) throws SQLException{
         if(venueRepository.findId((String) newData.get("id")) == false){
             return null;
         }

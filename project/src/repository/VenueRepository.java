@@ -8,6 +8,7 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -60,7 +61,29 @@ public class VenueRepository {
         }
     }
 
-    public Venue getVenueById(String id) throws SQLException{
+    public List<Map<String, Object>> getEventsVenue(String id) throws SQLException{
+        String query = "select * from events join venues on venues.id = events.venue_id where venues.id = ?";
+
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, id);
+
+            List<Map<String, Object>> result = new ArrayList<>();
+
+            ResultSet rs= ps.executeQuery();
+            while(rs.next()){
+                Map<String, Object> tmp = new LinkedHashMap<>();
+                tmp.put("id", rs.getString("id"));
+                tmp.put("name", rs.getString("name"));
+                tmp.put("date", rs.getString("date"));
+
+                result.add(tmp);
+            }
+            return result;
+        }
+    }
+
+    public Map<String, Object> getVenueById(String id) throws SQLException{
         String query = "select * from venues where id = " + id;
 
         try(Connection conn = DatabaseManager.getConnection();
@@ -68,18 +91,28 @@ public class VenueRepository {
             ResultSet rs = ps.executeQuery();
             if(rs.next() == false) return null;
 
-            Venue result = new Venue(
-                    rs.getString("id"),
-                    rs.getString("name"),
-                    rs.getString("address"),
-                    rs.getInt("maxCapacity"),
-                    rs.getString("createdAt")
-            );
+            Map<String, Object> result = new LinkedHashMap<>();
+            result.put("id", rs.getString("id"));
+            result.put("name", rs.getString("name"));
+            result.put("address", rs.getInt("maxCapacity"));
+            result.put("createdAt", rs.getString("createdAt"));
+
+            result.put("events", getEventsVenue(id));
             return result;
         }
     }
 
-    public Venue updateVenue(Map<String, Object> newData) throws SQLException{
+    public int getCapacity(String venueId) throws SQLException{
+        String query = "select max_capacity from venues where id = ?";
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, venueId);
+            ResultSet rs = ps.executeQuery();
+            return rs.getInt("max_capacity");
+        }
+    }
+
+    public Map<String, Object> updateVenue(Map<String, Object> newData) throws SQLException{
         String query = "update venues set ";
         if(newData.get("name") != null) query += "name = ?, ";
         if(newData.get("address") != null) query += "address = ?, ";
@@ -93,11 +126,19 @@ public class VenueRepository {
 
         try(Connection conn = DatabaseManager.getConnection();
             PreparedStatement ps = conn.prepareStatement(queryFinal)){
-            int affectedRows= ps.executeUpdate();
-            if(affectedRows == 0){
-                return null;
+            int idx= 1;
+
+            if(newData.get("name") != null) ps.setString(idx++, (String) newData.get("name"));
+            if(newData.get("address") != null) ps.setString(idx++, (String) newData.get("address"));
+            if(newData.get("maxCapacity") != null) ps.setString(idx++, (String) newData.get("maxCapacity"));
+
+            int affectedRows = ps.executeUpdate();
+            if (affectedRows == 0){
+                throw new SQLException("gagal update venue");
             }
-            return getVenueById((String) newData.get("id"));
+            Map<String, Object> result = getVenueById((String) newData.get("id"));
+            result.remove("events");
+            return result;
         }
     }
     public void deleteVenue(Venue venue){}
