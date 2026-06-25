@@ -152,6 +152,7 @@ public class App {
             userHandler.updateUser(req,res);
         });
 
+        // ==================================================================================
         // VENUES
         server.get("/api/venues", (req, res) -> {
             venueHandler.getAllVenues(req,res);
@@ -167,6 +168,52 @@ public class App {
 
         server.put("/api/venues/{id}", (req, res) -> {
             venueHandler.updateVenue(req,res);
+        });
+
+        // ==================================================================================
+        // EVENTS
+        server.get("/api/events", (req, res) -> {
+            eventHandler.getAllEvents(req,res);
+        });
+
+        server.get("/api/events/price-summary", (req, res) -> {
+            eventHandler.getPriceSummary(req,res);
+        });
+
+        server.get("/api/events/{id}", (req, res) -> {
+            eventHandler.getEventById(req,res);
+        });
+
+        server.post("/api/events", (req, res) -> {
+            eventHandler.addEvent(req,res);
+        });
+
+        server.put("/api/events/{id}", (req, res) -> {
+            eventHandler.updateEvent(req,res);
+        });
+
+        // ==================================================================================
+        // TICKETS
+        server.get("/api/tickets", (req, res) -> {
+            ticketHandler.getAllTickets(req,res);
+        });
+
+        server.get("/api/tickets{id}", (req, res) -> {
+            ticketHandler.getTicketById(req,res);
+        });
+
+        server.post("/api/tickets", (req, res) -> {
+            ticketHandler.addTicket(req,res);
+        });
+
+        server.put("/api/tickets/{id}/refund", (req, res) -> {
+            ticketHandler.refundTicket(req,res);
+        });
+
+        // ==================================================================================
+        // REPORTS
+        server.get("/api/reports/sales?eventId={id}", (req, res) -> {
+            ticketHandler.reports(req,res);
         });
 
         // Jalankan server

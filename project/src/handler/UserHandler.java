@@ -78,7 +78,7 @@ public class UserHandler {
             res.sendError(400, "Request body harus berformat JSON");
             return;
         }
-
+        body.put("id", req.getPathParam("id"));
         if(body.get("id") == null || ((String)body.get("id")).isEmpty()){
             res.sendError(400, "ID user kosong");
             return ;
@@ -102,7 +102,7 @@ public class UserHandler {
             res.sendError(404, "id tidak ditemukan");
             return;
         }
-        res.sendSuccess("Successfully updated !");
+        res.sendSuccess(result);
     }
 
 }
