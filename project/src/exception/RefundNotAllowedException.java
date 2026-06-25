@@ -1,4 +1,7 @@
 package exception;
 
-public class RefundNotAllowedException {
+public class RefundNotAllowedException extends  RuntimeException{
+    public RefundNotAllowedException(String msg){
+        super(msg);
+    }
 }
