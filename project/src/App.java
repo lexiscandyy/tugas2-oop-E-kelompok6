@@ -141,12 +141,7 @@ public class App {
         });
 
         server.get("/api/users/{id}", (req, res) -> {
-            String id = req.getPathParam("id");
-
-            Map<String, Object> data = new HashMap<>();
-            data.put("id", id);
-            data.put("nama", "Item dengan ID " + id);
-            res.sendSuccess(data);
+            userHandler.getUserById(req,res);
         });
 
         // Jalankan server

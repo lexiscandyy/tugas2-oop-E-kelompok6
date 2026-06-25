@@ -17,8 +17,8 @@ public class UserService {
         userRepository.addUser(user);
     }
 
-    public User getUserId(String id){
-        return userRepository.getUserId(id);
+    public static User getUserById(String id) throws SQLException {
+        return userRepository.getUserById(id);
     }
 
     public static List<User> getAllUsers(String role) throws SQLException {

@@ -14,7 +14,26 @@ import java.util.Map;
 
 public class UserRepository {
     public void addUser(User user){}
-    public User getUserId(String id){}
+
+    public User getUserById(String id) throws SQLException{
+        String query = "select * from users where id = ?";
+
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            User result = new User(
+                    rs.getString("id"),
+                    rs.getString("name"),
+                    rs.getString("email"),
+                    rs.getString("phone"),
+                    rs.getString("role"),
+                    rs.getString("created_at")
+            );
+            return result;
+        }
+    }
 
     public List<User> getAllUsers(String role) throws SQLException {
         String query;
@@ -32,11 +51,13 @@ public class UserRepository {
             }
             ResultSet rs = ps.executeQuery();
             while(rs.next()){
-                result.add(new User(rs.getString("id"),
-                                rs.getString("name"),
-                                rs.getString("email"),
-                                rs.getString("phone"),
-                                rs.getString("role")));
+                result.add(new User(
+                        rs.getString("id"),
+                        rs.getString("name"),
+                        rs.getString("email"),
+                        rs.getString("phone"),
+                        rs.getString("role"),
+                        rs.getString("created_at")));
             }
         }
         return result;
