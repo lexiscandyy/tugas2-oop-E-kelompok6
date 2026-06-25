@@ -30,15 +30,16 @@ public class VenueService {
         return venueRepository.addVenue(newVenue);
     }
 
-    public Venue getVenueId(String id){
-        return venueRepository.getVenueId(id);
+
+    public static Venue updateVenue (Map<String, Object> newData) throws SQLException{
+        if(venueRepository.findId((String) newData.get("id")) == false){
+            return null;
+        }
+
+        return venueRepository.updateVenue(newData);
     }
 
-    public void updateVenue (Venue venue){
-        venueRepository.updateVenue(venue);
-    }
-
-    public void deleteVenue(String id){
-        venueRepository.deleteVenue(id);
-    }
+//    public void deleteVenue(String id){
+//        venueRepository.deleteVenue(id);
+//    }
 }

@@ -46,7 +46,7 @@ public class UserService {
 
     public static User updateUser (Map<String, Object> user) throws SQLException {
         if(userRepository.findId((String) user.get("id")) == false){
-            throw new SQLException("ID tidak ditemukan");
+            return null;
         }
 
         if((String)user.get("email") != null && userRepository.findEmail((String)user.get("email")) == true){

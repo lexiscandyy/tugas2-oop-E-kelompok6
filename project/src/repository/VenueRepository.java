@@ -79,7 +79,27 @@ public class VenueRepository {
         }
     }
 
-    public void updateVenue(Venue venue){}
+    public Venue updateVenue(Map<String, Object> newData) throws SQLException{
+        String query = "update venues set ";
+        if(newData.get("name") != null) query += "name = ?, ";
+        if(newData.get("address") != null) query += "address = ?, ";
+        if(newData.get("maxCapacity") != null) query += "max_capacity = ?";
+
+        String queryFinal = "";
+        for(int i =0;i<query.length()-2;i++){
+            queryFinal += query.charAt(i);
+        }
+        queryFinal += " where id = ?";
+
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(queryFinal)){
+            int affectedRows= ps.executeUpdate();
+            if(affectedRows == 0){
+                return null;
+            }
+            return getVenueById((String) newData.get("id"));
+        }
+    }
     public void deleteVenue(Venue venue){}
 
     public int countVenues() throws SQLException{
@@ -87,6 +107,16 @@ public class VenueRepository {
             PreparedStatement ps = conn.prepareStatement("select count(*) as totalData from venues")){
             ResultSet rs = ps.executeQuery();
             return rs.getInt("totalData");
+        }
+    }
+
+    public boolean findId(String id) throws SQLException{
+        String query = "select * from venues where id = ?";
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
         }
     }
 }

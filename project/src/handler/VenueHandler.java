@@ -52,7 +52,33 @@ public class VenueHandler {
     }
 
     public void updateVenue(Request req, Response res) throws Exception{
+        Map<String, Object> data = req.getJSON();
 
+        if (data == null) {
+            res.sendError(400, "Request body harus berformat JSON (Content-Type: application/json)");
+            return;
+        }
+
+        if(data.get("id") == null){
+            res.sendError(400, "ID null");
+            return;
+        }
+
+        String newName = (String) data.get("name");
+        String newAddress = (String) data.get("address");
+        Integer newMaxCapacity = (Integer) data.get("maxCapacity");
+
+        if(newName == null && newAddress == null && newMaxCapacity == null){
+            res.sendError(400, "Tidka ada data yang di update");
+            return;
+        }
+
+        Venue result = VenueService.updateVenue(data);
+        if(result == null){
+            res.sendError(404, "id tidak ditemukan");
+            return;
+        }
+        res.sendSuccess(result);
     }
 
 

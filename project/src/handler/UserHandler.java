@@ -97,7 +97,12 @@ public class UserHandler {
             res.sendError(400, "nama user kosong");
             return ;
         }
-        UserService.updateUser(body);
+
+        User result = UserService.updateUser(body);
+        if(result == null){
+            res.sendError(404, "id tidak ditemukan");
+            return;
+        }
         res.sendSuccess("Successfully updated !");
     }
 
