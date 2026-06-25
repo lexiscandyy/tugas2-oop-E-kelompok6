@@ -8,7 +8,7 @@ import java.util.List;
 import java.util.Map;
 
 public class UserService {
-    private static UserRepository userRepository;
+    private static UserRepository userRepository = new UserRepository();
 
     public void userService(){
         userRepository = new UserRepository();
@@ -37,6 +37,9 @@ public class UserService {
     }
 
     public static User getUserById(String id) throws SQLException {
+        if(userRepository.findId(id) == false){
+            return null;
+        }
         return userRepository.getUserById(id);
     }
 

@@ -55,7 +55,7 @@ public class UserRepository {
 
     public List<User> getAllUsers(String role) throws SQLException {
         String query;
-        if (role == null){
+        if (role != null){
             query = "select * from users where role = ?";
         }else{
             query = "select * from users";

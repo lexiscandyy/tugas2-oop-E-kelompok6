@@ -8,7 +8,11 @@ import java.util.List;
 import java.util.Map;
 
 public class VenueService {
-    private static VenueRepository venueRepository;
+    private static VenueRepository venueRepository = new VenueRepository();
+
+    public VenueService(){
+        venueRepository = new VenueRepository();
+    }
 
     public static String generateId() throws SQLException {
         String result = "VNU-";

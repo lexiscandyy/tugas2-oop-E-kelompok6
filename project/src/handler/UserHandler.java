@@ -23,6 +23,10 @@ public class UserHandler {
     public void getUserById(Request req, Response res) throws Exception{
         String id =req.getPathParam("id");
         User data = UserService.getUserById(id);
+        if(data == null){
+            res.sendError(404, "Id tidak ditemukan");
+            return;
+        }
         res.sendSuccess(data);
     }
 
@@ -30,12 +34,6 @@ public class UserHandler {
         Map<String, Object> body = req.getJSON();
         if (body == null) {
             res.sendError(400, "Request body harus berformat JSON (Content-Type: application/json)");
-            return;
-        }
-
-        String nama = (String) body.get("nama");
-        if (nama == null || nama.isEmpty()) {
-            res.sendError(400, "Field 'nama' wajib diisi");
             return;
         }
 
@@ -56,8 +54,9 @@ public class UserHandler {
             return;
         }
 
-        if((String) body.get("role") != "buyer" && (String) body.get("role") != "organizer"){
+        if(((String) body.get("role")).equals("buyer") == false && ((String) body.get("role")).equals("organizer") == false){
             res.sendError(400, "role harus 'buyer' atau 'organizer'");
+            return;
         }
 
         UserService.addUser(body);
