@@ -60,6 +60,10 @@ public class UserHandler {
             return;
         }
 
+        if((String) body.get("role") != "buyer" && (String) body.get("role") != "organizer"){
+            res.sendError(400, "role harus 'buyer' atau 'organizer'");
+        }
+
         UserService.addUser(body);
         // Proses data...
         Map<String, Object> created = new HashMap<>();
