@@ -36,7 +36,7 @@ public class UserService {
         userRepository.addUser(newUser);
     }
 
-    public static User getUserById(String id) throws SQLException {
+    public static Map<String, Object> getUserById(String id) throws SQLException {
         if(userRepository.findId(id) == false){
             return null;
         }

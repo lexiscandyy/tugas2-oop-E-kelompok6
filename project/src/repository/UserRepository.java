@@ -33,22 +33,68 @@ public class UserRepository {
         }
     }
 
-    public User getUserById(String id) throws SQLException{
-        String query = "select * from users where id = ?";
+    public Map<String, Object> getBuyerSummary(String id) throws SQLException{
+        String query = "select sum(quantity) as totalQty, sum(total_price) as totalSpend from tickets " +
+                "join users on tickets.user_id = users.id where users.id = ? group by users.id";
 
         try(Connection conn = DatabaseManager.getConnection();
             PreparedStatement ps = conn.prepareStatement(query)){
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
 
-            User result = new User(
-                    rs.getString("id"),
-                    rs.getString("name"),
-                    rs.getString("email"),
-                    rs.getString("phone"),
-                    rs.getString("role"),
-                    rs.getString("created_at")
-            );
+            Map<String, Object> result = new LinkedHashMap<>();
+            result.put("totalTicketsPurchased", rs.getInt("totalQty"));
+            result.put("totalSpending", rs.getDouble("totalSpend"));
+
+            return result;
+        }
+    }
+
+    public Map<String, Object> getOrganizerSummary(String id) throws SQLException{
+        String queryTotalCreated = "select count(*) as totalCreated from events " +
+                "join users on users.id = events.organizer_id where events.organizer_id = ?";
+
+        String queryTotalRevenue = "select sum(total_price) as totalRevenue from tickets " +
+                "join events on events.id = tickets.event_id where events.organizer_id = ?";
+
+        Map<String , Object> result = new LinkedHashMap<>();
+
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(queryTotalCreated)){
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            result.put("totalEventsCreated", rs.getObject("totalCreated"));
+        }
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(queryTotalRevenue)){
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            result.put("totalRevenue", rs.getObject("totalRevenue") == null ? 0 : rs.getObject("totalRevenue") == null);
+        }
+
+        return result;
+    }
+
+    public Map<String, Object> getUserById(String id) throws SQLException{
+        String query = "select * from users where id = ?";
+
+        String role = getRole(id);
+
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            Map<String ,Object> result = new LinkedHashMap<>();
+            result.put("id", rs.getString("id"));
+            result.put("name", rs.getString("name"));
+            result.put("email", rs.getString("email"));
+            result.put("phone", rs.getString("phone"));
+            result.put("role", rs.getString("role"));
+            result.put("createdAt", rs.getString("created_at"));
+
+            result.put("summary", role.equals("buyer") ? getBuyerSummary(id) : getOrganizerSummary(id));
+
             return result;
         }
     }
@@ -79,6 +125,17 @@ public class UserRepository {
             }
         }
         return result;
+    }
+
+    public String getRole(String id) throws SQLException{
+        String query = "select * from users where id = ?";
+
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            return rs.getString("role");
+        }
     }
 
     /**

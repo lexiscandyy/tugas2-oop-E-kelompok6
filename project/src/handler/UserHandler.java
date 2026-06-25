@@ -22,7 +22,7 @@ public class UserHandler {
 
     public void getUserById(Request req, Response res) throws Exception{
         String id =req.getPathParam("id");
-        User data = UserService.getUserById(id);
+        Map<String, Object> data = UserService.getUserById(id);
         if(data == null){
             res.sendError(404, "Id tidak ditemukan");
             return;
@@ -95,6 +95,11 @@ public class UserHandler {
         if(body.get("name") != null && ((String)body.get("name")).isEmpty()){
             res.sendError(400, "nama user kosong");
             return ;
+        }
+
+        if (((String) body.get("role")).equals("buyer") == false && ((String) body.get("role")).equals("organizer") == false) {
+            res.sendError(400, "role harus 'buyer' atau 'organizer'");
+            return;
         }
 
         User result = UserService.updateUser(body);
