@@ -148,8 +148,25 @@ public class App {
             userHandler.addUser(req,res);
         });
 
-        server.put("/api/contoh/{id}", (req, res) -> {
+        server.put("/api/users/{id}", (req, res) -> {
             userHandler.updateUser(req,res);
+        });
+
+        // VENUES
+        server.get("/api/venues", (req, res) -> {
+            venueHandler.getAllVenues(req,res);
+        });
+
+        server.get("/api/venues/{id}", (req, res) -> {
+            venueHandler.getAllVenues(req,res);
+        });
+
+        server.post("/api/venues", (req, res) -> {
+            venueHandler.getAllVenues(req,res);
+        });
+
+        server.put("/api/venues/{id}", (req, res) -> {
+            venueHandler.getAllVenues(req,res);
         });
 
         // Jalankan server
