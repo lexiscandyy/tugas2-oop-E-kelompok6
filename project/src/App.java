@@ -158,15 +158,15 @@ public class App {
         });
 
         server.get("/api/venues/{id}", (req, res) -> {
-            venueHandler.getAllVenues(req,res);
+            venueHandler.getVenueById(req,res);
         });
 
         server.post("/api/venues", (req, res) -> {
-            venueHandler.getAllVenues(req,res);
+            venueHandler.addVenue(req,res);
         });
 
         server.put("/api/venues/{id}", (req, res) -> {
-            venueHandler.getAllVenues(req,res);
+            venueHandler.updateVenue(req,res);
         });
 
         // Jalankan server

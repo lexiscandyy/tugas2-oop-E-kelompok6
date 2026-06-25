@@ -7,8 +7,6 @@ public class Venue {
     private int maxCapacity;
     private String createdAt;
 
-    public Venue() {}
-
     public Venue(String id, String name, String address, int maxCapacity, String createdAt) {
         this.id = id;
         this.name = name;

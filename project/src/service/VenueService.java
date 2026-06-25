@@ -3,13 +3,18 @@ package service;
 import model.Venue;
 import repository.VenueRepository;
 
+import java.sql.SQLException;
 import java.util.List;
 
 public class VenueService {
-    private VenueRepository venueRepository;
+    private static VenueRepository venueRepository;
 
-    public venueService(){
-        venueRepository = new VenueRepository();
+    public static List<Venue> getAllVenues() throws SQLException {
+        return venueRepository.getAllVenues();
+    }
+
+    public static Venue getVenueById(String id) throws SQLException {
+        return venueRepository.getVenueById(id);
     }
 
     public void addVenue(Venue venue){
@@ -18,10 +23,6 @@ public class VenueService {
 
     public Venue getVenueId(String id){
         return venueRepository.getVenueId(id);
-    }
-
-    public List<Venue> getAllVenues(){
-        return venueRepository.getAllVenues();
     }
 
     public void updateVenue (Venue venue){
