@@ -116,7 +116,34 @@ public class UserRepository {
         }
     }
 
-    public void updateUser(User user){}
+    public void updateUser(Map<String, Object> user) throws SQLException{
+        String query = "update users set";
+        if((String) user.get("name") != null) query += " name = ?, ";
+        if((String) user.get("email") != null) query += " email = ?, ";
+        if((String) user.get("phone") != null) query += " phone = ?, ";
+        if((String) user.get("role") != null) query += " role = ?, ";
+
+        String queryFinal = "";
+        for(int i = 0;i < query.length()-2;i++){ // ngapus koma dan spasi
+            queryFinal += query.charAt(i);
+        }
+        queryFinal += " where id = ?";
+
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(queryFinal)){
+            int index = 1;
+            if((String) user.get("name") != null) ps.setString(index++, (String) user.get("name"));
+            if((String) user.get("email") != null) ps.setString(index++, (String) user.get("email"));
+            if((String) user.get("phone") != null) ps.setString(index++, (String) user.get("phone"));
+            if((String) user.get("role") != null) ps.setString(index++, (String) user.get("role"));
+            ps.setString(index, (String) user.get("id"));
+
+            int affectedRows = ps.executeUpdate();
+            if(affectedRows == 0){
+                throw new SQLException("Gagal update data user");
+            }
+        }
+    }
     public void deleteUser(User user){}
 }
 

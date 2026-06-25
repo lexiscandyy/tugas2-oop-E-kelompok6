@@ -42,7 +42,18 @@ public class UserService {
         return userRepository.getAllUsers(role);
     }
 
-    public void updateUser (User user){
+    public static void updateUser (Map<String, Object> user) throws SQLException {
+        if(userRepository.findId((String) user.get("id")) == false){
+            throw new SQLException("ID tidak ditemukan");
+        }
+
+        if((String)user.get("email") != null && userRepository.findEmail((String)user.get("email")) == true){
+            throw new IllegalArgumentException(String.format("Email %s sudah terdaftar pada user lain", (String) user.get("email")));
+        }
+
+        if((String)user.get("phone") != null && userRepository.findPhone((String)user.get("phone")) == true){
+            throw new IllegalArgumentException(String.format("nomor %s sudah terdaftar pada user lain", (String) user.get("phone")));
+        }
         userRepository.updateUser(user);
     }
 

@@ -5,6 +5,7 @@ import server.Response;
 import model.User;
 import service.UserService;
 
+import java.security.spec.ECField;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
@@ -70,6 +71,34 @@ public class UserHandler {
 
         created.put("message", "Data berhasil dibuat");
         res.sendCreated(created);
+    }
+
+    public void updateUser(Request req, Response res) throws Exception{
+        Map<String, Object> body = req.getJSON();
+        if (body == null) {
+            res.sendError(400, "Request body harus berformat JSON");
+            return;
+        }
+
+        if(body.get("id") == null || ((String)body.get("id")).isEmpty()){
+            res.sendError(400, "ID user kosong");
+            return ;
+        }
+
+        if(body.get("name") == null
+                && body.get("email") == null
+                && body.get("phone") == null
+                && body.get("role") == null){
+            res.sendError(400, "Tidak ada data yang mau di update");
+            return;
+        }
+
+        if(body.get("name") != null && ((String)body.get("name")).isEmpty()){
+            res.sendError(400, "nama user kosong");
+            return ;
+        }
+        UserService.updateUser(body);
+        res.sendSuccess("Successfully updated !");
     }
 
 }
