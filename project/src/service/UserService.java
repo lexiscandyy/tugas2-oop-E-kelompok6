@@ -47,7 +47,7 @@ public class UserService {
         return userRepository.getAllUsers(role);
     }
 
-    public static User updateUser (Map<String, Object> user) throws SQLException {
+    public static Map<String, Object> updateUser (Map<String, Object> user) throws SQLException {
         if(userRepository.findId((String) user.get("id")) == false){
             return null;
         }

@@ -174,7 +174,7 @@ public class UserRepository {
         }
     }
 
-    public User updateUser(Map<String, Object> user) throws SQLException{
+    public Map<String, Object> updateUser(Map<String, Object> user) throws SQLException{
         String query = "update users set";
         if((String) user.get("name") != null) query += " name = ?, ";
         if((String) user.get("email") != null) query += " email = ?, ";
@@ -200,13 +200,15 @@ public class UserRepository {
             if(affectedRows == 0){
                 throw new SQLException("Gagal update data user");
             }else{
-                User result = new User(
-                        (String) user.get("id"),
-                        (String) user.get("name"),
-                        (String) user.get("email"),
-                        (String) user.get("phone"),
-                        (String) user.get("role")
-                );
+                Map<String, Object> result = new LinkedHashMap<>();
+                user = getUserById((String)user.get("id"));
+
+                if((String) user.get("id") != null) result.put("id", user.get("id"));
+                if((String) user.get("name") != null) result.put("name", user.get("name"));
+                if((String) user.get("email") != null) result.put("email", user.get("email"));
+                if((String) user.get("phone") != null) result.put("phone", user.get("phone"));
+                if((String) user.get("role") != null) result.put("role", user.get("role"));
+
                 return result;
             }
         }

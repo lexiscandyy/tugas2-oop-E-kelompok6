@@ -102,7 +102,7 @@ public class UserHandler {
             return;
         }
 
-        User result = UserService.updateUser(body);
+        Map<String, Object> result = UserService.updateUser(body);
         if(result == null){
             res.sendError(404, "id tidak ditemukan");
             return;
