@@ -144,6 +144,10 @@ public class App {
             userHandler.getUserById(req,res);
         });
 
+        server.post("/api/users", (req, res) -> {
+            userHandler.addUser(req,res);
+        });
+
         // Jalankan server
         System.out.printf("Server berjalan di http://localhost:%d%n", port);
         System.out.println("Tekan Ctrl+C untuk menghentikan server.\n");
