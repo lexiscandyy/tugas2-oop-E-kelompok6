@@ -21,7 +21,9 @@ public class EventHandler {
         res.sendSuccess(result);
     }
 
-    public void getPriceSummary(Request req, Response res) {
+    public void getPriceSummary(Request req, Response res) throws Exception {
+        List<Map<String, Object>> result = EventService.getPriceSummary();
+        res.sendSuccess(result);
     }
 
     public void getEventById(Request req, Response res) throws Exception {

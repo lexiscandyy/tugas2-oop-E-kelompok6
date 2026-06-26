@@ -1,7 +1,6 @@
 package repository;
 import database.DatabaseManager;
-import model.Event;
-import model.User;
+import model.*;
 import server.Response;
 import server.Server;
 
@@ -223,6 +222,45 @@ public class EventRepository {
             ps.setString(2, category);
             ResultSet rs = ps.executeQuery();
             return rs.next();
+        }
+    }
+
+    public List<Map<String, Object>> getPriceSummary() throws SQLException{
+        String query = "select * from events";
+
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)){
+            ResultSet rs = ps.executeQuery();
+            List<Map<String, Object>> result = new ArrayList<>();
+            while(rs.next()){
+                Map<String, Object> tmp = new LinkedHashMap<>();
+                Event event;
+                String type = rs.getString("type");
+                if(type.equals("concert")){
+                    event = new Concert();
+                }else if(type.equals("seminar")) event = new Seminar();
+                else event = new SportMatch();
+
+                event.setName(rs.getString("name"));
+                event.setType(type);
+                event.setBasePrice(rs.getDouble("base_price"));
+
+                Map<String, Object> capacity = getEventCapacity(rs.getString("id"));
+                Map<String, Double> prices = new LinkedHashMap<>();
+
+                if(capacity.containsKey("regular")) prices.put("regular", event.calculateTicketPrice("regular"));
+                if(capacity.containsKey("vip")) prices.put("vip", event.calculateTicketPrice("vip"));
+                if(capacity.containsKey("vvip")) prices.put("vvip", event.calculateTicketPrice("vvip"));
+                if(capacity.containsKey("tribune")) prices.put("tribune", event.calculateTicketPrice("tribune"));
+                if(capacity.containsKey("festival")) prices.put("festival", event.calculateTicketPrice("festival"));
+
+                tmp.put("id", rs.getString("id"));
+                tmp.put("name", event.getName());
+                tmp.put("type", event.getType());
+                tmp.put("prices", prices);
+                result.add(tmp);
+            }
+            return result;
         }
     }
 }

@@ -148,4 +148,8 @@ public class EventService {
     public static Map<String, Object> updateEvent(Map<String, Object> data) throws SQLException{
         return eventRepository.updateEvent(data);
     }
+
+    public static List<Map<String, Object>> getPriceSummary() throws SQLException{
+        return eventRepository.getPriceSummary();
+    }
 }
