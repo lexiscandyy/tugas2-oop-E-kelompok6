@@ -146,6 +146,6 @@ public class EventService {
     }
 
     public static Map<String, Object> updateEvent(Map<String, Object> data) throws SQLException{
-        eventRepository.updateEvent(data);
+        return eventRepository.updateEvent(data);
     }
 }

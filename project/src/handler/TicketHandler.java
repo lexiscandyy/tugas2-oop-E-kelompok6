@@ -57,7 +57,15 @@ public class TicketHandler {
         res.sendSuccess(result);
     }
 
-    public void refundTicket(Request req, Response res) {
+    public void refundTicket(Request req, Response res) throws Exception {
+        String id = req.getPathParam("id");
+        Map<String, Object> result = TicketService.refundTicket(id);
+        if (result == null){
+            res.sendError(404, "id tiket tidak ditemukan");
+            return;
+        }
+
+        res.sendSuccess(result);
     }
 
     public void reports(Request req, Response res) {

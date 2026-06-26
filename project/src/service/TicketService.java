@@ -1,8 +1,9 @@
 package service;
 
 import exception.EventNotFoundException;
+import exception.RefundNotAllowedException;
 import exception.TicketSoldOutException;
-import model.Ticket;
+import model.*;
 import repository.EventRepository;
 import repository.TicketRepository;
 import repository.UserRepository;
@@ -94,4 +95,55 @@ public class TicketService {
         return result;
     }
 
+    public static Map<String, Object> refundTicket(String id) throws SQLException {
+
+        if (ticketRepository.findId(id) == false) {
+            return null;
+        }
+
+        Map<String, Object> ticketData = ticketRepository.getTicketById(id);
+        Map<String, Object> eventData = eventRepository.getEventById((String) ticketData.get("eventId"));
+        String type = (String) eventData.get("type");
+
+        Event event;
+        if (type.equals("concert")) {
+            event = new Concert();
+        } else if (type.equals("seminar")) {
+            event = new Seminar();
+        } else event = new SportMatch();
+
+        event.setId((String) eventData.get("id"));
+        event.setType((String) eventData.get("type"));
+        event.setName((String) eventData.get("name"));
+        event.setVenueId((String) eventData.get("venueId"));
+        event.setOrganizerId((String) eventData.get("organizerId"));
+        event.setDate((String) eventData.get("date"));
+        event.setBasePrice((Double) eventData.get("basePrice"));
+
+        if ((event instanceof Refundable) == false) {
+            throw new RefundNotAllowedException("SportMatch events do not support refunds");
+        }
+
+        String ticketPurchaseDate = (String) ticketData.get("purchaseDate");
+        String eventDate = (String) eventData.get("date");
+        int daysBeforeEvent = ticketRepository.calculateRemainingDaysBeforeEvent(ticketPurchaseDate, eventDate);
+
+        double refundPercentage = ((Refundable) event).calculateRefund(daysBeforeEvent);
+        double refundAmount =  refundPercentage * event.getBasePrice();
+
+        ticketRepository.updateTicket(id, refundAmount);
+        ticketData = ticketRepository.getTicketById(id);
+        eventData = eventRepository.getEventById((String) ticketData.get("eventId"));
+
+        Map<String ,Object> result = new LinkedHashMap<>();
+
+        result.put("id", id);
+        result.put("event", eventData.get("name"));
+        result.put("totalPaid", ticketData.get("totalPrice"));
+        result.put("refundedPercentage", refundPercentage * 100);
+        result.put("refundAmount", refundAmount);
+        result.put("status", "refunded");
+
+        return result;
+    }
 }

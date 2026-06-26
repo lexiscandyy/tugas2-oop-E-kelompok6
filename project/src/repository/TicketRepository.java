@@ -154,4 +154,36 @@ public class TicketRepository {
             return result;
         }
     }
+
+    public void updateTicket(String ticketId, double refundAmount) throws SQLException{
+        String query = "update tickets set " +
+                "status = 'refunded', " +
+                "refund_amount = ? where id = ?";
+
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setDouble(1, refundAmount);
+            ps.setString(2, ticketId);
+            int affectedRows = ps.executeUpdate();
+            if(affectedRows == 0){
+                throw new SQLException("gagal update ticket");
+            }
+        }
+    }
+
+    public int calculateRemainingDaysBeforeEvent(String ticketPurchaseDate, String eventDate) throws SQLException{
+        String query = "select julianday(?) - julianday(?) as diff";
+        if(ticketPurchaseDate == null || eventDate == null){
+            throw new IllegalArgumentException("argumen tidak boleh null");
+        }
+
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, ticketPurchaseDate);
+            ps.setString(2, eventDate);
+            ResultSet rs = ps.executeQuery();
+
+            return rs.getInt("diff");
+        }
+    }
 }
