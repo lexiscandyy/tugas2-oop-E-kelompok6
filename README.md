@@ -8,15 +8,6 @@ REST API berbasis **Java** untuk sistem **Manajemen Event dan Ticketing** menggu
 
 Event Management & Ticketing REST API merupakan aplikasi backend berbasis **Java** yang menyediakan layanan **REST API** untuk mengelola data **User**, **Venue**, **Event**, **Ticket**, dan **Order**. API ini memungkinkan pengguna melakukan operasi **Create, Read, Update, Delete (CRUD)** terhadap setiap entitas yang tersimpan pada database **SQLite**.
 
-Project ini dikembangkan sebagai implementasi konsep **Object-Oriented Programming (OOP)** yang telah dipelajari selama perkuliahan, meliputi:
-
-* Encapsulation
-* Inheritance
-* Polymorphism
-* Abstraction
-
-Selain itu, project menerapkan arsitektur **Model → Repository → Service → Handler**, sehingga setiap layer memiliki tanggung jawab yang jelas dalam proses pengolahan data. Seluruh endpoint API diuji menggunakan **Postman**.
-
 ---
 
 # Teknologi yang Digunakan
@@ -65,7 +56,7 @@ http://localhost:8080
 | DELETE | /users/{id} | Menghapus user                |
 
 
-## 🏢 Venue
+## Venue
 
 | Method | Endpoint     | Deskripsi                      |
 | ------ | ------------ | ------------------------------ |
@@ -147,12 +138,12 @@ src/
 
 # Pembagian Tugas Anggota
 
-| Anggota        | NIM       | Tanggung Jawab                                                                                                                                               |
-| -------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Nama Anggota 1 | 25xxxxxxx | Model: User.java, Venue.java, Repository: UserRepository.java, VenueRepository.java, Service: UserService.java, VenueService.java                            |
-| Nama Anggota 2 | 25xxxxxxx | Model: Event.java, Repository: EventRepository.java, Service: EventService.java                                                                              |
-| Nama Anggota 3 | 25xxxxxxx | Model: Ticket.java, Order.java, Repository: TicketRepository.java, OrderRepository.java                                                                      |
-| Nama Anggota 4 | 25xxxxxxx | Service: TicketService.java, OrderService.java, Exception Classes                                                                                            |
+| Anggota             | NIM        | Tanggung Jawab                                                                                                                                               |
+| ------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Nama Anggota 1      | 25xxxxxxx  | Model: User.java, Venue.java, Repository: UserRepository.java, VenueRepository.java, Service: UserService.java, VenueService.java                            |
+| Andika Septianantha | 2505551163 | User.java, Venue.java, UserRepository.java, VenueRepository.java, UserService.java, VenueService.java                                                        |
+| Nama Anggota 3      | 25xxxxxxx  | Model: Ticket.java, Order.java, Repository: TicketRepository.java, OrderRepository.java                                                                      |
+| Nama Anggota 4      | 25xxxxxxx  | Service: TicketService.java, OrderService.java, Exception Classes                                                                                            |
 
 
 
