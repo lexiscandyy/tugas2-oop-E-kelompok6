@@ -155,6 +155,33 @@ public class EventRepository {
         }
     }
 
+    public Map<String, Object> updateEvent(Map<String, Object> data) throws SQLException{
+        String query = "update events set ";
+        if(data.containsKey("name")) query += "name = ?, ";
+        if(data.containsKey("date")) query += "date = ?, ";
+        if(data.containsKey("basePrice")) query += "base_price = ?, ";
+
+        String queryFinal = "";
+        for(int i = 0;i < query.length()-2;i++){
+            queryFinal += query.charAt(i);
+        }
+
+        queryFinal += "where id = ?";
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(queryFinal)){
+            int idx =1;
+
+            if(data.containsKey("name")) ps.setString(idx++, (String) data.get("name"));
+            if(data.containsKey("date")) ps.setString(idx++, (String) data.get("date"));
+            if(data.containsKey("basePrice")) ps.setString(idx++, (String) data.get("basePrice"));
+
+            ResultSet rs = ps.executeQuery();
+            Map<String, Object> result = getEventById((String) data.get("id"));
+            return result;
+
+        }
+    }
+
     public int countEvents()throws  SQLException {
         String query = "select count(*) as total from events";
         try(Connection conn = DatabaseManager.getConnection();

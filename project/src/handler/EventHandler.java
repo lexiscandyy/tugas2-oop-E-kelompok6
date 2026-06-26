@@ -36,7 +36,10 @@ public class EventHandler {
 
     public void addEvent(Request req, Response res) throws Exception {
         Map<String, Object> data = req.getJSON();
-
+        if (data == null) {
+            res.sendError(400, "Request body harus berformat JSON");
+            return;
+        }
         String type = (String)data.get("type");
         String name = (String) data.get("name");
         String venueId = (String) data.get("venueId");
@@ -84,7 +87,32 @@ public class EventHandler {
         res.sendSuccess(result);
     }
 
-    public void updateEvent(Request req, Response res) {
+    public void updateEvent(Request req, Response res) throws Exception {
+        Map<String, Object> data = req.getJSON();
+        if (data == null) {
+            res.sendError(400, "Request body harus berformat JSON");
+            return;
+        }
+        String id = req.getPathParam("id");
+
+        data.put("id" , id);
+        String newName = (String) data.get("name");
+        String newDate=  (String) data.get("date");
+        Integer newBasePrice = (Integer) data.get("basePrice");
+
+        if(newName == null && newDate == null && newBasePrice == null){
+            res.sendError(400, "Tidak ada data yg bisa diudptae");
+            return;
+        }
+
+        Map<String, Object> result = EventService.updateEvent(data);
+
+        if(result == null){
+            res.sendError(404, "id event tidak ditemukan");
+            return;
+        }
+
+        res.sendSuccess(result);
     }
 
     public static boolean isValidDate(String date) {
