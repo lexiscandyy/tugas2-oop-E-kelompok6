@@ -69,7 +69,7 @@ public class TicketService {
         }
 
         Map<String, Object> capacity = eventRepository.getEventCapacity(eventId);
-        if((Integer) capacity.get(category) < quantity){
+        if((Integer) capacity.get(category) - (Integer) capacity.get("filled_" + category) < quantity){
             throw new TicketSoldOutException(String.format("Jumlah Kapasitas %s untuk eventId %s tidak cukup" ,category, eventId));
         }
 
@@ -78,7 +78,7 @@ public class TicketService {
         Map<String, Object> userData = userRepository.getUserById(userId);
 
         data.put("id", id);
-
+        data.put("type", eventData.get("type"));
         data = ticketRepository.addTicket(data);
 
         Map<String,Object> buyer = new LinkedHashMap<>();
@@ -103,6 +103,10 @@ public class TicketService {
 
         if (ticketRepository.findId(id) == false) {
             return null;
+        }
+
+        if(ticketRepository.isRefunded(id) == true){
+            throw new RefundNotAllowedException(String.format("Ticket dengan id %s sudah di refund", id));
         }
 
         Map<String, Object> ticketData = ticketRepository.getTicketById(id);
@@ -133,7 +137,7 @@ public class TicketService {
         int daysBeforeEvent = ticketRepository.calculateRemainingDaysBeforeEvent(ticketPurchaseDate, eventDate);
 
         double refundPercentage = ((Refundable) event).calculateRefund(daysBeforeEvent);
-        double refundAmount =  refundPercentage * event.calculateTicketPrice((String) ticketData.get("category"));
+        double refundAmount =  refundPercentage * event.calculateTicketPrice((String) ticketData.get("category")) * (Integer) ticketData.get("quantity");
 
         ticketRepository.updateTicket(id, refundAmount);
         ticketRepository.updateCapacity((Integer) ticketData.get("quantity") * -1, (String) ticketData.get("eventId"), (String) ticketData.get("category"));
@@ -147,7 +151,7 @@ public class TicketService {
         result.put("event", eventData.get("name"));
         result.put("totalPaid", ticketData.get("totalPrice"));
         result.put("refundedPercentage", refundPercentage * 100);
-        result.put("refundAmount", refundAmount *  (Integer)ticketData.get("quantity"));
+        result.put("refundAmount", refundAmount);
         result.put("status", "refunded");
 
         return result;

@@ -69,7 +69,7 @@ public class UserRepository {
             PreparedStatement ps = conn.prepareStatement(queryTotalRevenue)){
             ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
-            result.put("totalRevenue", rs.getObject("totalRevenue") == null ? 0 : rs.getObject("totalRevenue") == null);
+            result.put("totalRevenue", rs.getObject("totalRevenue") == null ? 0 : rs.getDouble("totalRevenue"));
         }
 
         return result;

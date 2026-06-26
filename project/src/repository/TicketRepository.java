@@ -119,19 +119,19 @@ public class TicketRepository {
         String userId = (String) data.get("userId");
         String category = (String) data.get("category");
         Integer quantity = (Integer) data.get("quantity");
-
+        String type = (String) data.get("type");
         double unitPrice;
         double totalPrice;
 
         Event event;
-        if(category.equals("concert") ){
+        if(type.equals("concert") ){
             event = new Concert();
-        }else if(category.equals("seminar")){
+        }else if(type.equals("seminar")){
             event = new Seminar();
         }else event = new SportMatch();
         EventRepository eventRepository = new EventRepository();
 
-        event.setBasePrice((Double)eventRepository.getEventById(eventId).get("basePrice"));
+        event.setBasePrice((double)eventRepository.getEventById(eventId).get("basePrice"));
 
         unitPrice = event.calculateTicketPrice(category);
         totalPrice = unitPrice * quantity;
@@ -206,6 +206,16 @@ public class TicketRepository {
             ResultSet rs = ps.executeQuery();
 
             return rs.getInt("diff");
+        }
+    }
+
+    public boolean isRefunded(String id) throws  SQLException{
+        String query = "select * from tickets where id = ? and status = 'refunded'";
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
         }
     }
 }
