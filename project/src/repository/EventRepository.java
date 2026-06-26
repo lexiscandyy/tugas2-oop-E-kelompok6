@@ -1,6 +1,7 @@
 package repository;
 import database.DatabaseManager;
 import model.Event;
+import model.User;
 import server.Response;
 import server.Server;
 
@@ -44,6 +45,36 @@ public class EventRepository {
                 tmp.put("capacity", getEventCapacity(rs.getString("id")));
                 result.add(tmp);
             }
+            return result;
+        }
+    }
+
+    public Map<String, Object> getEventById(String id) throws SQLException{
+        String query = "select * from events where id = ?";
+
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+
+            String type = rs.getString("type");
+            String name = rs.getString("name");
+            String venueId = rs.getString("venue_id");
+            String organizerId = rs.getString("organizer_id");
+            String date = rs.getString("date");
+            int basePrice = rs.getInt("base_price");
+            String createdAt = rs.getString("created_at");
+
+            Map<String, Object> result = new LinkedHashMap<>();
+            result.put("id", id);
+            result.put("type", type);
+            result.put("name", name);
+            result.put("venueId", venueId);
+            result.put("organizerId", organizerId);
+            result.put("date", date);
+            result.put("basePrice", basePrice);
+            result.put("createdAt", createdAt);
+
             return result;
         }
     }
@@ -116,7 +147,9 @@ public class EventRepository {
 
             Map<String, Object> result = new LinkedHashMap<>();
             while(rs.next()){
-                result.put(rs.getString("type"), rs.getInt("total"));
+                result.put(rs.getString("category"), rs.getInt("total"));
+                result.put("total", rs.getInt("total"));
+                result.put("filled", rs.getInt("filled"));
             }
             return result;
         }
@@ -137,6 +170,17 @@ public class EventRepository {
         try(Connection conn = DatabaseManager.getConnection();
             PreparedStatement ps = conn.prepareStatement(query)){
             ps.setString(1, date);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        }
+    }
+
+    public boolean findId(String id) throws SQLException{
+        String query = "select * from events where id = ?";
+
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
             return rs.next();
         }

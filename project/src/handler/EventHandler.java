@@ -24,8 +24,14 @@ public class EventHandler {
     public void getPriceSummary(Request req, Response res) {
     }
 
-    public void getEventById(Request req, Response res) {
-
+    public void getEventById(Request req, Response res) throws Exception {
+        String id = req.getPathParam("id");
+        Map<String, Object> result = EventService.getEventById(id);
+        if(result == null){
+            res.sendError(404, "event id tidak ditemukan");
+            return;
+        }
+        res.sendSuccess(result);
     }
 
     public void addEvent(Request req, Response res) throws Exception {
