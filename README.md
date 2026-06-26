@@ -22,9 +22,9 @@ Event Management & Ticketing REST API merupakan aplikasi backend berbasis **Java
 # Cara Menjalankan Server
 
 1. Clone Repository
-git clone [https://github.com/username/event-management-ticketing-api.git](https://github.com/lexiscandyy/tugas2-oop-E-kelompok6.git)
+   git clone [https://github.com/username/event-management-ticketing-api.git](https://github.com/lexiscandyy/tugas2-oop-E-kelompok6.git)
 2. Masuk ke Folder Project
-cd event-management-ticketing-api
+   cd event-management-ticketing-api
 3. Buka Project
 
 Buka project menggunakan IntelliJ IDEA atau IDE Java lainnya.
@@ -104,46 +104,48 @@ src/
 │
 ├── handler/
 │   ├── EventHandler.java
-│   ├── OrderHandler.java
-│   ├── RouteHandler.java
 │   ├── TicketHandler.java
 │   ├── UserHandler.java
 │   └── VenueHandler.java
 │
 ├── model/
+│   ├── Concert.java
 │   ├── Event.java
-│   ├── Order.java
+│   ├── Refundable.java
+│   ├── Seminar.java
+│   ├── SportMatch.java
 │   ├── Ticket.java
 │   ├── User.java
 │   └── Venue.java
 │
 ├── repository/
 │   ├── EventRepository.java
-│   ├── OrderRepository.java
 │   ├── TicketRepository.java
 │   ├── UserRepository.java
 │   └── VenueRepository.java
 │
+├── server/
+│   ├── Request.java
+│   ├── Response.java
+│   ├── RouteHandler.java
+│   └── Server.java
+|
 ├── service/
 │   ├── EventService.java
-│   ├── OrderService.java
 │   ├── TicketService.java
 │   ├── UserService.java
 │   └── VenueService.java
 │
-└── Server.java
+├── App.java
 ```
 
 ---
 
 # Pembagian Tugas Anggota
 
-| Anggota             | NIM        | Tanggung Jawab                                                                                                                                               |
-| ------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Nama Anggota 1      | 25xxxxxxx  | Model: User.java, Venue.java, Repository: UserRepository.java, VenueRepository.java, Service: UserService.java, VenueService.java                            |
-| Andika Septianantha | 2505551163 | User.java, Venue.java, UserRepository.java, VenueRepository.java, UserService.java, VenueService.java                                                        |
-| Nama Anggota 3      | 25xxxxxxx  | Model: Ticket.java, Order.java, Repository: TicketRepository.java, OrderRepository.java                                                                      |
-| Nama Anggota 4      | 25xxxxxxx  | Service: TicketService.java, OrderService.java, Exception Classes                                                                                            |
-
-
-
+| Anggota                 | NIM        | Tanggung Jawab                                                                                                                                               |
+| ----------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Ketut Rama Indrawangsa  | 2505551087 | EventService.java, TicketService.java, EventRepository.java, TicketRepository.java, logika polymorphism, refund, kapasitas                                   |
+| I Komang Jaya Mahardika | 2505551014 | Model: Event.java, Concert.java, Seminar.java, SportMatch.java, Refundable.java, Ticket.java                                                                 |
+| Andika Septianantha     | 2505551163 | User.java, Venue.java, UserRepository.java, VenueRepository.java, UserService.java, VenueService.java                                                        |
+| Ahmad Ali Gasim         | 2505551089 | Handler: UserHandler.java, VenueHandler.java, EventHandler.java, TicketHandler.java, Exception classes, App.java routing, README, Postman testing            |
