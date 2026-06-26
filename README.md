@@ -4,7 +4,7 @@ REST API berbasis **Java** untuk sistem **Manajemen Event dan Ticketing** menggu
 
 ---
 
-# 📖 Deskripsi Proyek
+# Deskripsi Proyek
 
 Event Management & Ticketing REST API merupakan aplikasi backend berbasis **Java** yang menyediakan layanan **REST API** untuk mengelola data **User**, **Venue**, **Event**, **Ticket**, dan **Order**. API ini memungkinkan pengguna melakukan operasi **Create, Read, Update, Delete (CRUD)** terhadap setiap entitas yang tersimpan pada database **SQLite**.
 
@@ -19,7 +19,7 @@ Selain itu, project menerapkan arsitektur **Model → Repository → Service →
 
 ---
 
-# 🛠️ Teknologi yang Digunakan
+# Teknologi yang Digunakan
 
 * Java
 * SQLite
@@ -28,10 +28,33 @@ Selain itu, project menerapkan arsitektur **Model → Repository → Service →
 * Postman
 * Git & GitHub
 
+# Cara Menjalankan Server
 
-# 📡 Daftar Endpoint API
+1. Clone Repository
+git clone https://github.com/username/event-management-ticketing-api.git
+2. Masuk ke Folder Project
+cd event-management-ticketing-api
+3. Buka Project
 
-## 👤 User
+Buka project menggunakan IntelliJ IDEA atau IDE Java lainnya.
+
+4. Tambahkan SQLite JDBC Driver
+
+Pastikan library SQLite JDBC sudah ditambahkan ke project agar aplikasi dapat terhubung dengan database SQLite.
+
+5. Jalankan Server
+
+Jalankan file berikut:
+
+Server.java
+
+Apabila server berhasil dijalankan, API dapat diakses melalui:
+
+http://localhost:8080
+
+# Daftar Endpoint API
+
+## User
 
 | Method | Endpoint    | Deskripsi                     |
 | ------ | ----------- | ----------------------------- |
@@ -53,7 +76,7 @@ Selain itu, project menerapkan arsitektur **Model → Repository → Service →
 | DELETE | /venues/{id} | Menghapus venue                |
 
 
-## 🎉 Event
+## Event
 
 | Method | Endpoint     | Deskripsi                      |
 | ------ | ------------ | ------------------------------ |
@@ -64,7 +87,7 @@ Selain itu, project menerapkan arsitektur **Model → Repository → Service →
 | DELETE | /events/{id} | Menghapus event                |
 
 
-## 🎫 Ticket
+## Ticket
 
 | Method | Endpoint      | Deskripsi                      |
 | ------ | ------------- | ------------------------------ |
@@ -75,7 +98,7 @@ Selain itu, project menerapkan arsitektur **Model → Repository → Service →
 | DELETE | /tickets/{id} | Menghapus tiket                |
 
 
-# 📂 Struktur Proyek
+# Struktur Proyek
 
 ```text
 src/
@@ -122,7 +145,7 @@ src/
 
 ---
 
-# 👥 Pembagian Tugas Anggota
+# Pembagian Tugas Anggota
 
 | Anggota        | NIM       | Tanggung Jawab                                                                                                                                               |
 | -------------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
