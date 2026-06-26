@@ -36,7 +36,6 @@ Pastikan library SQLite JDBC sudah ditambahkan ke project agar aplikasi dapat te
 5. Jalankan Server
 
 Jalankan file berikut:
-
 Server.java
 
 Apabila server berhasil dijalankan, API dapat diakses melalui:
@@ -141,11 +140,11 @@ src/
 
 ---
 
-# Pembagian Tugas Anggota
+## Pembagian Tugas
 
-| Anggota                 | NIM        | Tanggung Jawab                                                                                                                                               |
-| ----------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Ketut Rama Indrawangsa  | 2505551087 | EventService.java, TicketService.java, EventRepository.java, TicketRepository.java, logika polymorphism, refund, kapasitas                                   |
-| I Komang Jaya Mahardika | 2505551014 | Model: Event.java, Concert.java, Seminar.java, SportMatch.java, Refundable.java, Ticket.java                                                                 |
-| Andika Septianantha     | 2505551163 | User.java, Venue.java, UserRepository.java, VenueRepository.java, UserService.java, VenueService.java                                                        |
-| Ahmad Ali Gasim         | 2505551089 | Handler: UserHandler.java, VenueHandler.java, EventHandler.java, TicketHandler.java, Exception classes, App.java routing, README, Postman testing            |
+| Anggota | NIM | Tingkat | Tanggung Jawab |
+|---|---|---|---|
+| Ketut Rama Indrawangsa | 2505551087 | Paling kuat coding | EventService.java, TicketService.java, EventRepository.java, TicketRepository.java, logika polymorphism, refund, kapasitas |
+| I Komang Jaya Mahardika | 2505551014 | Menengah | Model: Event.java, Concert.java, Seminar.java, SportMatch.java, Refundable.java, Ticket.java |
+| Andika Septianantha | 2505551163 | Menengah / pemula | User.java, Venue.java, UserRepository.java, VenueRepository.java, UserService.java, VenueService.java |
+| Ahmad Ali Gasim | 2505551089 | Paling pemula | Handler: UserHandler.java, VenueHandler.java, EventHandler.java, TicketHandler.java, Exception classes, App.java routing, README, Postman testing |
