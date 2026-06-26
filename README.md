@@ -136,11 +136,14 @@ src/
 
 ---
 
-## Pembagian Tugas (dibuatkan oleh AI)
+# Pembagian Tugas Anggota
 
-| Anggota                 | NIM        | Tingkat | Tanggung Jawab |
-|-------------------------|------------|---------|---|
-| Ketut Rama Indrawangsa  | 2505551087 | Hard    | EventService.java, TicketService.java, EventRepository.java, TicketRepository.java, logika polymorphism, refund, kapasitas |
-|  I Komang Jaya Mahardika   | 2505551014 | Medium  | Model: Event.java, Concert.java, Seminar.java, SportMatch.java, Refundable.java, Ticket.java |
-| Andhika Septianantha | 2505551167 |  Normal | User.java, Venue.java, UserRepository.java, VenueRepository.java, UserService.java, VenueService.java |
-| Ahmad Ali Gasim         | 2505551089 | Easy    | Handler: UserHandler.java, VenueHandler.java, EventHandler.java, TicketHandler.java, Exception classes, App.java routing, README, Postman testing |
+| Anggota             | NIM        | Tanggung Jawab                                                                                                                                               |
+| ------------------- | ---------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| Nama Anggota 1      | 25xxxxxxx  | Model: User.java, Venue.java, Repository: UserRepository.java, VenueRepository.java, Service: UserService.java, VenueService.java                            |
+| Andika Septianantha | 2505551163 | User.java, Venue.java, UserRepository.java, VenueRepository.java, UserService.java, VenueService.java                                                        |
+| Nama Anggota 3      | 25xxxxxxx  | Model: Ticket.java, Order.java, Repository: TicketRepository.java, OrderRepository.java                                                                      |
+| Nama Anggota 4      | 25xxxxxxx  | Service: TicketService.java, OrderService.java, Exception Classes                                                                                            |
+
+
+
