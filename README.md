@@ -363,7 +363,7 @@ POST `/api/tickets`
 
 ---
 
-## Pembagian Tugas
+## Pembagian Tugas (dibuatkan oleh AI)
 
 | Anggota | NIM | Tingkat | Tanggung Jawab |
 |---|---|---|---|
