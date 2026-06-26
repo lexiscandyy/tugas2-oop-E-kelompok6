@@ -218,4 +218,44 @@ public class TicketRepository {
             return rs.next();
         }
     }
+
+    public Map<String, Object> getEventReports(String eventId) throws SQLException{
+        String queryQuantity = "select sum(quantity) as totalQuantity from tickets where event_id = ?";
+        String queryTotalPrice= "select sum(total_price) as totalPrice from tickets where event_id = ?";
+        String queryRefundCount = "select count(*) as statusCount from tickets where event_id = ? and status = 'refunded'";
+        String queryRefundAmount = "select sum(refund_amount) as refundAmount from tickets where event_id = ?";
+
+        EventRepository eventRepository = new EventRepository();
+        Map<String, Object> eventData = eventRepository.getEventById(eventId);
+        Map<String, Object> result = new LinkedHashMap<>();
+        result.put("eventId", eventData.get("id"));
+        result.put("eventName", eventData.get("name"));
+
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(queryQuantity)){
+            ps.setString(1, eventId);
+            ResultSet rs = ps.executeQuery();
+            result.put("totalTicketSold", rs.getString("totalQuantity"));
+        }
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(queryTotalPrice)){
+            ps.setString(1, eventId);
+            ResultSet rs = ps.executeQuery();
+            result.put("totalRevenue", rs.getString("totalPrice"));
+        }
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(queryRefundCount)){
+            ps.setString(1, eventId);
+            ResultSet rs = ps.executeQuery();
+            result.put("refundCount", rs.getString("statusCount"));
+        }
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(queryRefundAmount)){
+            ps.setString(1, eventId);
+            ResultSet rs = ps.executeQuery();
+            result.put("refundAmount", rs.getString("refundAmount"));
+        }
+
+        return result;
+    }
 }

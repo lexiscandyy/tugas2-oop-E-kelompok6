@@ -212,8 +212,8 @@ public class App {
 
         // ==================================================================================
         // REPORTS
-        server.get("/api/reports/sales?eventId={id}", (req, res) -> {
-            ticketHandler.reports(req,res);
+        server.get("/api/reports/sales", (req, res) -> {
+            ticketHandler.reports(req, res);
         });
 
         // Jalankan server

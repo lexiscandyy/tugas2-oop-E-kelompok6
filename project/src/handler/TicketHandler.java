@@ -68,6 +68,15 @@ public class TicketHandler {
         res.sendSuccess(result);
     }
 
-    public void reports(Request req, Response res) {
+    public void reports(Request req, Response res) throws Exception {
+        String id= req.getQueryParam("eventId");
+        Map<String, Object> result = TicketService.getEventReports(id);
+
+        if(res==null){
+            res.sendError(404, "id event tidak ditemukan");
+            return;
+        }
+
+        res.sendSuccess(result);
     }
 }

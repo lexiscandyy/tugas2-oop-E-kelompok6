@@ -156,4 +156,12 @@ public class TicketService {
 
         return result;
     }
+
+    public static Map<String, Object> getEventReports(String eventId) throws SQLException{
+        if(eventRepository.findId(eventId) == false){
+            return null;
+        }
+
+        return ticketRepository.getEventReports(eventId);
+    }
 }
