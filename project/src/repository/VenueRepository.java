@@ -84,18 +84,19 @@ public class VenueRepository {
     }
 
     public Map<String, Object> getVenueById(String id) throws SQLException{
-        String query = "select * from venues where id = " + id;
+        String query = "select * from venues where id = ?";
 
         try(Connection conn = DatabaseManager.getConnection();
             PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, id);
             ResultSet rs = ps.executeQuery();
             if(rs.next() == false) return null;
 
             Map<String, Object> result = new LinkedHashMap<>();
             result.put("id", rs.getString("id"));
             result.put("name", rs.getString("name"));
-            result.put("address", rs.getInt("maxCapacity"));
-            result.put("createdAt", rs.getString("createdAt"));
+            result.put("address", rs.getInt("max_capacity"));
+            result.put("createdAt", rs.getString("created_at"));
 
             result.put("events", getEventsVenue(id));
             return result;

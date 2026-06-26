@@ -82,7 +82,7 @@ public class TicketRepository {
             result.put("quantity", rs.getInt("quantity"));
             result.put("unitPrice", rs.getDouble("unit_price"));
             result.put("totalPrice", rs.getDouble("total_price"));
-            result.put("purchaseDate", rs.getString("purchaseDate"));
+            result.put("purchaseDate", rs.getString("purchase_date"));
             result.put("status", rs.getString("status"));
             result.put("refundAmount", rs.getDouble("refund_amount"));
 
@@ -111,7 +111,7 @@ public class TicketRepository {
     }
 
     public Map<String, Object> addTicket(Map<String, Object> data) throws SQLException{
-        String query = "insert into tickets (id, event_id, user_id, category, quantity, unit_price, total_price " +
+        String query = "insert into tickets (id, event_id, user_id, category, quantity, unit_price, total_price) " +
                 "values(?,?,?,?,?,?,?)";
 
         String id= (String) data.get("id");
@@ -129,6 +129,9 @@ public class TicketRepository {
         }else if(category.equals("seminar")){
             event = new Seminar();
         }else event = new SportMatch();
+        EventRepository eventRepository = new EventRepository();
+
+        event.setBasePrice((Double)eventRepository.getEventById(eventId).get("basePrice"));
 
         unitPrice = event.calculateTicketPrice(category);
         totalPrice = unitPrice * quantity;
@@ -150,6 +153,7 @@ public class TicketRepository {
             Map<String, Object> result = getTicketById(id);
             result.put("unitPrice", unitPrice);
             result.put("totalPrice", totalPrice);
+
 
             return result;
         }

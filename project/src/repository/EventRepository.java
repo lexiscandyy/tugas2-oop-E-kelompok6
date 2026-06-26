@@ -62,7 +62,7 @@ public class EventRepository {
             String venueId = rs.getString("venue_id");
             String organizerId = rs.getString("organizer_id");
             String date = rs.getString("date");
-            int basePrice = rs.getInt("base_price");
+            Double basePrice = rs.getDouble("base_price");
             String createdAt = rs.getString("created_at");
 
             Map<String, Object> result = new LinkedHashMap<>();
@@ -148,7 +148,6 @@ public class EventRepository {
             Map<String, Object> result = new LinkedHashMap<>();
             while(rs.next()){
                 result.put(rs.getString("category"), rs.getInt("total"));
-                result.put("total", rs.getInt("total"));
                 result.put("filled", rs.getInt("filled"));
             }
             return result;

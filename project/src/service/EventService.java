@@ -37,7 +37,7 @@ public class EventService {
 
         Map<String, Object> user = userRepository.getUserById(organizerId);
         if(((String) user.get("role")).equals("organizer") == false){
-            return null;
+            throw new IllegalArgumentException("USER bukan merupakan organizer");
         }
 
         int capacityCount = 0;
@@ -97,11 +97,11 @@ public class EventService {
         Map<String, Object> capacity = eventRepository.getEventCapacity(id);
         Map<String, Object> remainingCapacity = new LinkedHashMap<>();
 
-        if(capacity.containsKey("vip")) remainingCapacity.put("vip", (Integer) capacity.get("total") - (Integer) capacity.get("filled"));
-        if(capacity.containsKey("regular")) remainingCapacity.put("regular", (Integer) capacity.get("total") - (Integer) capacity.get("filled"));
-        if(capacity.containsKey("festival")) remainingCapacity.put("festival", (Integer) capacity.get("total") - (Integer) capacity.get("filled"));
-        if(capacity.containsKey("tribune")) remainingCapacity.put("tribune", (Integer) capacity.get("total") - (Integer) capacity.get("filled"));
-        if(capacity.containsKey("vvip")) remainingCapacity.put("vvip", (Integer) capacity.get("total") - (Integer) capacity.get("filled"));
+        if(capacity.containsKey("vip")) remainingCapacity.put("vip", (Integer) capacity.get("vip") - (Integer) capacity.get("filled"));
+        if(capacity.containsKey("regular")) remainingCapacity.put("regular", (Integer) capacity.get("regular") - (Integer) capacity.get("filled"));
+        if(capacity.containsKey("festival")) remainingCapacity.put("festival", (Integer) capacity.get("festival") - (Integer) capacity.get("filled"));
+        if(capacity.containsKey("tribune")) remainingCapacity.put("tribune", (Integer) capacity.get("tribune") - (Integer) capacity.get("filled"));
+        if(capacity.containsKey("vvip")) remainingCapacity.put("vvip", (Integer) capacity.get("vvip") - (Integer) capacity.get("filled"));
 
         Event eventType;
 

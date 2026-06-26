@@ -16,7 +16,8 @@ public class VenueHandler {
     }
 
     public void getVenueById(Request req, Response res) throws Exception{
-        Map<String, Object> result = VenueService.getVenueById(req.getPathParam("id"));
+        String id = req.getPathParam("id");
+        Map<String, Object> result = VenueService.getVenueById(id);
         if (result == null) res.sendError(404, "ID tidak ditemukan");
         else res.sendSuccess(result);
     }
