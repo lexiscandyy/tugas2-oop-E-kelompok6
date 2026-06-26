@@ -31,7 +31,7 @@ Selain itu, project menerapkan arsitektur **Model → Repository → Service →
 # Cara Menjalankan Server
 
 1. Clone Repository
-git clone https://github.com/username/event-management-ticketing-api.git
+git clone [https://github.com/username/event-management-ticketing-api.git](https://github.com/lexiscandyy/tugas2-oop-E-kelompok6.git)
 2. Masuk ke Folder Project
 cd event-management-ticketing-api
 3. Buka Project
