@@ -12,8 +12,6 @@ public class Ticket {
     private String status;      // 'active' atau 'refunded'
     private double refundAmount;
 
-    public Ticket() {}
-
     public Ticket(String id, String eventId, String userId, String category,
                   int quantity, double unitPrice, double totalPrice,
                   String purchaseDate, String status, double refundAmount) {
@@ -28,6 +26,8 @@ public class Ticket {
         this.status = status;
         this.refundAmount = refundAmount;
     }
+
+    public Ticket(){};
 
     // Getters
     public String getId() { return id; }
