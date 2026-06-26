@@ -137,6 +137,8 @@ public class EventRepository {
         }
     }
 
+
+
     public Map<String, Object> getEventCapacity(String eventId) throws SQLException{
         String query = "select * from capacities where event_id = ?";
 
@@ -148,7 +150,7 @@ public class EventRepository {
             Map<String, Object> result = new LinkedHashMap<>();
             while(rs.next()){
                 result.put(rs.getString("category"), rs.getInt("total"));
-                result.put("filled", rs.getInt("filled"));
+                result.put("filled_" + rs.getString("category"), rs.getInt("filled"));
             }
             return result;
         }
@@ -207,6 +209,18 @@ public class EventRepository {
         try(Connection conn = DatabaseManager.getConnection();
             PreparedStatement ps = conn.prepareStatement(query)){
             ps.setString(1, id);
+            ResultSet rs = ps.executeQuery();
+            return rs.next();
+        }
+    }
+
+    public boolean findCapacityCategory(String eventId, String category) throws SQLException{
+        String query = "select * from capacities where event_id = ? and category = ?";
+
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setString(1, eventId);
+            ps.setString(2, category);
             ResultSet rs = ps.executeQuery();
             return rs.next();
         }

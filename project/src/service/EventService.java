@@ -81,7 +81,7 @@ public class EventService {
         String venueId = (String) eventData.get("venueId");
         String organizerId = (String) eventData.get("organizerId");
         String date = (String) eventData.get("date");
-        Integer basePrice = (Integer) eventData.get("basePrice");
+        Double basePrice = (Double) eventData.get("basePrice");
         String createdAt = (String) eventData.get("createdAt");
 
         Map<String, Object> userData = userRepository.getUserById(organizerId);
@@ -97,11 +97,11 @@ public class EventService {
         Map<String, Object> capacity = eventRepository.getEventCapacity(id);
         Map<String, Object> remainingCapacity = new LinkedHashMap<>();
 
-        if(capacity.containsKey("vip")) remainingCapacity.put("vip", (Integer) capacity.get("vip") - (Integer) capacity.get("filled"));
-        if(capacity.containsKey("regular")) remainingCapacity.put("regular", (Integer) capacity.get("regular") - (Integer) capacity.get("filled"));
-        if(capacity.containsKey("festival")) remainingCapacity.put("festival", (Integer) capacity.get("festival") - (Integer) capacity.get("filled"));
-        if(capacity.containsKey("tribune")) remainingCapacity.put("tribune", (Integer) capacity.get("tribune") - (Integer) capacity.get("filled"));
-        if(capacity.containsKey("vvip")) remainingCapacity.put("vvip", (Integer) capacity.get("vvip") - (Integer) capacity.get("filled"));
+        if(capacity.containsKey("vip")) remainingCapacity.put("vip", (Integer) capacity.get("vip") - (Integer) capacity.get("filled_vip"));
+        if(capacity.containsKey("regular")) remainingCapacity.put("regular", (Integer) capacity.get("regular") - (Integer) capacity.get("filled_regular"));
+        if(capacity.containsKey("festival")) remainingCapacity.put("festival", (Integer) capacity.get("festival") - (Integer) capacity.get("filled_festival"));
+        if(capacity.containsKey("tribune")) remainingCapacity.put("tribune", (Integer) capacity.get("tribune") - (Integer) capacity.get("filled_tribune"));
+        if(capacity.containsKey("vvip")) remainingCapacity.put("vvip", (Integer) capacity.get("vvip") - (Integer) capacity.get("filled_vvip"));
 
         Event eventType;
 

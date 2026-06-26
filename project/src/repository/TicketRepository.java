@@ -136,6 +136,8 @@ public class TicketRepository {
         unitPrice = event.calculateTicketPrice(category);
         totalPrice = unitPrice * quantity;
 
+        updateCapacity(quantity, eventId, category);
+
         try(Connection conn = DatabaseManager.getConnection();
             PreparedStatement ps = conn.prepareStatement(query)){
             ps.setString(1, id);
@@ -175,6 +177,22 @@ public class TicketRepository {
         }
     }
 
+    public void updateCapacity(Integer quantity, String eventId, String category) throws SQLException{
+        String query = "update capacities set filled = filled + ? where event_id = ? and category = ?";
+
+        try(Connection conn = DatabaseManager.getConnection();
+            PreparedStatement ps = conn.prepareStatement(query)){
+            ps.setInt(1, quantity);
+            ps.setString(2, eventId);
+            ps.setString(3, category);
+
+            int affectedRows = ps.executeUpdate();
+            if(affectedRows == 0){
+                throw new SQLException("gagal update data capacity");
+            }
+        }
+    }
+
     public int calculateRemainingDaysBeforeEvent(String ticketPurchaseDate, String eventDate) throws SQLException{
         String query = "select julianday(?) - julianday(?) as diff";
         if(ticketPurchaseDate == null || eventDate == null){
@@ -183,8 +201,8 @@ public class TicketRepository {
 
         try(Connection conn = DatabaseManager.getConnection();
             PreparedStatement ps = conn.prepareStatement(query)){
-            ps.setString(1, ticketPurchaseDate);
-            ps.setString(2, eventDate);
+            ps.setString(1, eventDate);
+            ps.setString(2, ticketPurchaseDate);
             ResultSet rs = ps.executeQuery();
 
             return rs.getInt("diff");

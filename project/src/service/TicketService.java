@@ -64,9 +64,13 @@ public class TicketService {
             return null;
         }
 
+        if(eventRepository.findCapacityCategory(eventId, category) == false){
+            throw new IllegalArgumentException(String.format("tidak terdapat kategori %s dalam eventId %s", category, eventId));
+        }
+
         Map<String, Object> capacity = eventRepository.getEventCapacity(eventId);
         if((Integer) capacity.get(category) < quantity){
-            throw new TicketSoldOutException(String.format("Kapasitas %s untuk eventId %s sudah abis",category, eventId));
+            throw new TicketSoldOutException(String.format("Jumlah Kapasitas %s untuk eventId %s tidak cukup" ,category, eventId));
         }
 
         Map<String, Object> result = new LinkedHashMap<>();
@@ -129,9 +133,11 @@ public class TicketService {
         int daysBeforeEvent = ticketRepository.calculateRemainingDaysBeforeEvent(ticketPurchaseDate, eventDate);
 
         double refundPercentage = ((Refundable) event).calculateRefund(daysBeforeEvent);
-        double refundAmount =  refundPercentage * event.getBasePrice();
+        double refundAmount =  refundPercentage * event.calculateTicketPrice((String) ticketData.get("category"));
 
         ticketRepository.updateTicket(id, refundAmount);
+        ticketRepository.updateCapacity((Integer) ticketData.get("quantity") * -1, (String) ticketData.get("eventId"), (String) ticketData.get("category"));
+
         ticketData = ticketRepository.getTicketById(id);
         eventData = eventRepository.getEventById((String) ticketData.get("eventId"));
 
@@ -141,7 +147,7 @@ public class TicketService {
         result.put("event", eventData.get("name"));
         result.put("totalPaid", ticketData.get("totalPrice"));
         result.put("refundedPercentage", refundPercentage * 100);
-        result.put("refundAmount", refundAmount);
+        result.put("refundAmount", refundAmount *  (Integer)ticketData.get("quantity"));
         result.put("status", "refunded");
 
         return result;

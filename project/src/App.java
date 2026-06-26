@@ -198,7 +198,7 @@ public class App {
             ticketHandler.getAllTickets(req,res);
         });
 
-        server.get("/api/tickets{id}", (req, res) -> {
+        server.get("/api/tickets/{id}", (req, res) -> {
             ticketHandler.getTicketById(req,res);
         });
 
