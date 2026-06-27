@@ -1,5 +1,6 @@
 package service;
 
+import exception.EventNotFoundException;
 import model.*;
 import repository.EventRepository;
 import repository.UserRepository;
@@ -54,7 +55,7 @@ public class EventService {
         }
 
         String date = (String) data.get("date");
-        if(eventRepository.findDate(date)){
+        if(eventRepository.findDate(date, venueId)){
             throw new IllegalArgumentException("terdapat event yang memiliki date yang sama");
         }
 
@@ -146,6 +147,19 @@ public class EventService {
     }
 
     public static Map<String, Object> updateEvent(Map<String, Object> data) throws SQLException{
+
+        if(eventRepository.findId((String) data.get("id")) == false){
+            throw new EventNotFoundException("id event tidak ditemukan");
+        }
+
+        String date = (String) data.get("date");
+        Map<String, Object> oldData = eventRepository.getEventById((String) data.get("id"));
+        String venueId = (String) oldData.get("venueId");
+        if(date != null){
+            if(eventRepository.findDate(date, venueId) == true){
+                throw new IllegalArgumentException("terdapat date yang sama untuk event lain ");
+            }
+        }
         return eventRepository.updateEvent(data);
     }
 

@@ -95,7 +95,8 @@ public class VenueRepository {
             Map<String, Object> result = new LinkedHashMap<>();
             result.put("id", rs.getString("id"));
             result.put("name", rs.getString("name"));
-            result.put("address", rs.getInt("max_capacity"));
+            result.put("address", rs.getString("address"));
+            result.put("maxCapacity", rs.getInt("max_capacity"));
             result.put("createdAt", rs.getString("created_at"));
 
             result.put("events", getEventsVenue(id));
@@ -114,10 +115,10 @@ public class VenueRepository {
     }
 
     public Map<String, Object> updateVenue(Map<String, Object> newData) throws SQLException{
-        String query = "update venues set ";
+        String query = "update venues set  ";
         if(newData.get("name") != null) query += "name = ?, ";
         if(newData.get("address") != null) query += "address = ?, ";
-        if(newData.get("maxCapacity") != null) query += "max_capacity = ?";
+        if(newData.get("maxCapacity") != null) query += "max_capacity = ?, ";
 
         String queryFinal = "";
         for(int i =0;i<query.length()-2;i++){
@@ -131,7 +132,9 @@ public class VenueRepository {
 
             if(newData.get("name") != null) ps.setString(idx++, (String) newData.get("name"));
             if(newData.get("address") != null) ps.setString(idx++, (String) newData.get("address"));
-            if(newData.get("maxCapacity") != null) ps.setString(idx++, (String) newData.get("maxCapacity"));
+            if(newData.get("maxCapacity") != null) ps.setInt(idx++, (Integer) newData.get("maxCapacity"));
+
+            ps.setString(idx, (String) newData.get("id"));
 
             int affectedRows = ps.executeUpdate();
             if (affectedRows == 0){

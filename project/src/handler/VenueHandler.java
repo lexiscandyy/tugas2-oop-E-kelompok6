@@ -54,17 +54,13 @@ public class VenueHandler {
 
     public void updateVenue(Request req, Response res) throws Exception{
         Map<String, Object> data = req.getJSON();
-
+        String id = req.getPathParam("id");
         if (data == null) {
             res.sendError(400, "Request body harus berformat JSON (Content-Type: application/json)");
             return;
         }
 
-        if(data.get("id") == null){
-            res.sendError(400, "ID null");
-            return;
-        }
-
+        data.put("id", id);
         String newName = (String) data.get("name");
         String newAddress = (String) data.get("address");
         Integer newMaxCapacity = (Integer) data.get("maxCapacity");

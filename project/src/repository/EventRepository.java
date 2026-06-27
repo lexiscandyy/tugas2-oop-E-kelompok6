@@ -156,7 +156,7 @@ public class EventRepository {
     }
 
     public Map<String, Object> updateEvent(Map<String, Object> data) throws SQLException{
-        String query = "update events set ";
+        String query = "update events set  ";
         if(data.containsKey("name")) query += "name = ?, ";
         if(data.containsKey("date")) query += "date = ?, ";
         if(data.containsKey("basePrice")) query += "base_price = ?, ";
@@ -173,9 +173,11 @@ public class EventRepository {
 
             if(data.containsKey("name")) ps.setString(idx++, (String) data.get("name"));
             if(data.containsKey("date")) ps.setString(idx++, (String) data.get("date"));
-            if(data.containsKey("basePrice")) ps.setString(idx++, (String) data.get("basePrice"));
+            if(data.containsKey("basePrice")) ps.setInt(idx++, (Integer) data.get("basePrice"));
 
-            ResultSet rs = ps.executeQuery();
+            ps.setString(idx++, (String) data.get("id"));
+
+            int affectedRows = ps.executeUpdate();
             Map<String, Object> result = getEventById((String) data.get("id"));
             return result;
 
@@ -191,12 +193,13 @@ public class EventRepository {
         }
     }
 
-    public boolean findDate(String date) throws SQLException{
-        String query = "select * from events where date = ?";
+    public boolean findDate(String date, String venueId) throws SQLException{
+        String query = "select * from events where date = ? and venue_id = ?";
 
         try(Connection conn = DatabaseManager.getConnection();
             PreparedStatement ps = conn.prepareStatement(query)){
             ps.setString(1, date);
+            ps.setString(2, venueId);
             ResultSet rs = ps.executeQuery();
             return rs.next();
         }
