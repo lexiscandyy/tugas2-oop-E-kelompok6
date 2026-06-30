@@ -72,7 +72,7 @@ public class TicketHandler {
         String id= req.getQueryParam("eventId");
         Map<String, Object> result = TicketService.getEventReports(id);
 
-        if(res==null){
+        if(result == null){
             res.sendError(404, "id event tidak ditemukan");
             return;
         }
