@@ -10,10 +10,6 @@ import java.util.Map;
 public class UserService {
     private static UserRepository userRepository = new UserRepository();
 
-    public void userService(){
-        userRepository = new UserRepository();
-    }
-
     public static String generateId() throws SQLException{
         String result = "USR-";
         result += String.valueOf(userRepository.countUser() + 1);
